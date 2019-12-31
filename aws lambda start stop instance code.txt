@@ -1,0 +1,58 @@
+Iam policy:
+-> create policy-policy generator->select EC2-> 
+-> actions (start,stop instances)
+-> select add statement
+-> add policy name and description
+
+-> selct roles -> new role-lambda -> select IAM policy created -> give role name and create role
+-> 
+
+Lambda->
+-> create a function-> author from scratch
+-> give name and select exciting role
+-> add json code to stop instances
+-> 
+
+cloudwatch->
+
+-> rules-> create-> schedule-
+-> add target-> select lambda function -> 
+
+
+Start instance: (python 2.7)
+------------------
+import boto3
+region = 'us-west-1'
+instances = ['i-12345cb6de4f78g9h', 'i-08ce9b2d7eccf6d26']
+
+def lambda_handler(event, context):
+    ec2 = boto3.client('ec2', region_name=region)
+    ec2.start_instances(InstanceIds=instances)
+    print 'started your instances: ' + str(instances)
+
+
+Stop Instances: (Python 2.7)
+-------------------------
+import boto3
+region = 'us-west-1'
+instances = ['i-12345cb6de4f78g9h', 'i-08ce9b2d7eccf6d26']
+
+def lambda_handler(event, context):
+    ec2 = boto3.client('ec2', region_name=region)
+    ec2.stop_instances(InstanceIds=instances)
+    print 'stopped your instances: ' + str(instances)
+
+-----------------------------------------------------------------------------------------------
+ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH 
+
+import boto3
+region = 'ap-south-1'
+ec2 = boto3.client('ec2', region_name=region)
+def lambda_handler(event, context):
+for instance in ec2.instances.all():
+    print (instance.id , instance.state)
+    if instance.state == running:
+        ec2.stop_instances(InstanceIds=instances)
+        print 'stoppedyour instances: ' + str(instances)  
+  
+4:42 PM

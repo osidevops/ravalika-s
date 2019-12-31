@@ -1,0 +1,44 @@
+---
+- hosts : swap
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : uncomment fstab
+      replace:
+              path: /etc/fstab
+              regexp: '/dev/disk/cloud/azure_resource-part1'
+              replace: '#/dev/disk/cloud/azure_resource-part1'
+    - name: uncomment previously added fstab
+      lineinfile:
+              path: /etc/fstab
+              regexp: '/dev/sdb1       /mnt/resource    xfs'
+              state: absent
+    - name: append fstab entry
+      lineinfile:
+              path: /etc/fstab
+              line: '/dev/sdb1       /mnt/resource   swap    defaults 0      0'
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+            path: /mnt
+            state: unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/roles/ansible-roles/vmswap/waagent.conf dest=/etc/waagent.conf
+
+    - name : restart walinuxagent
+      command : systemctl restart walinuxagent
+      when:  ansible_distribution == "Ubuntu"
+
+    - name: restart waagent
+      command: systemctl restart waagent
+      when: ansible_distribution == "RedHat"

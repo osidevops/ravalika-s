@@ -1,0 +1,41 @@
+#yum install -y tomcat
+#service tomcat status
+
+TOMCAT CONFIG FILE:   #vi /usr/local/tomcat9/conf 
+===================================================================
+
+# cd /usr/local
+
+(Now download the latest version of Apache Tomcat 9, using following wget command and setup it as shown.)
+
+# wget http://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
+# tar -xvf apache-tomcat-9.0.14.tar.gz
+# mv apache-tomcat-9.0.14 tomcat9
+
+(Before starting the Tomcat Service, configure CATALINA_HOME environment variable in your system using following command.)
+
+# echo "export CATALINA_HOME="/usr/local/tomcat9"" >> ~/.bashrc
+# source ~/.bashrc
+# cd /usr/local/tomcat9/bin
+# ./startup.sh 
+
+=======================================
+CONFIGURING TOMCAT:
+# vi /usr/local/tomcat9/conf/tomcat-users.xml 
+
+ADD:
+ <role rolename="manager-gui"/>
+<user username="tecmint" password="t$cm1n1" roles="manager-gui"/>
+
+<role rolename="admin-gui"/>
+<user username="admin" password="adm!n" roles="admin-gui"/>
+
+(After setting up the admin and managers roles, restart the Tomcat and then try to access the admin section.)
+
+./shutdown.sh 
+./startup.sh
+
+=================================================
+FOR PORT CHANGE:
+
+# vi /usr/local/tomcat9/conf/server.xml

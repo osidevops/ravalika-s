@@ -1,0 +1,29 @@
+pipeline{
+    agent any
+    tools{
+        maven 'mvn3.6'
+    }
+    stages{
+        stage('git'){
+            steps{
+                script{
+                    git credentialsId: '7a12f1fc-6ba0-412b-a56b-20342f125cc4', url: 'https://github.com/ravvalika/game-of-life.git'
+                }
+            }
+        }
+        stage('build'){
+            steps{
+                script{
+                    sh 'mvn install'
+                }
+            }
+        }
+        stage('deploy'){
+            steps{
+                script{
+                    sh 'cp /c/Users/sbethina/.jenkins/workspace/pipeline1/gameoflife-web/target/gameoflife.war /c/Users/sbethina/Downloads/apache-tomcat-8.0.32/webapps'
+                }
+            }
+        }
+    }
+}

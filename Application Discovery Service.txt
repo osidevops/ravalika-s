@@ -1,0 +1,42 @@
+INSTALLING ADS ON LINUX:
+---------------------------------------
+
+#curl -o ./aws-discovery-agent.tar.gz https://s3-us-west-2.amazonaws.com/aws-discovery-agent.us-west-2/linux/latest/aws-discovery-agent.tar.gz
+
+#curl -o ./agent.sig https://s3-us-west-2.amazonaws.com/aws-discovery-agent.us-west-2/linux/latest/aws-discovery-agent.tar.gz.sig
+
+#curl -o ./discovery.gpg https://s3-us-west-2.amazonaws.com/aws-discovery-agent.us-west-2/linux/latest/discovery.gpg
+
+#gpg --no-default-keyring --keyring ./discovery.gpg --verify agent.sig aws-discovery-agent.tar.gz
+
+#tar -xzf aws-discovery-agent.tar.gz
+
+#sudo bash install -r us-west-2 -k 'AKIA2G47Q5KB4BZGIGRG' 
+ -s 'hpO6Df/Nh//ng9Eqh6QQ7qacliKOwyBpQ4wCnQ4S'
+
+#systemctl start aws-discovery-daemon.service
+#systemctl restart aws-discovery-daemon.service
+#systemctl stop aws-discovery-daemon.service
+=============================================
+
+TO REMOVE ADS:
+#yum remove aws-discovery-agent
+
+============================================
+INSTALLING ADS ON WINDOWS:
+[[https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-agent.html#install_on_windows]]
+
+To install AWS Application Discovery Agent in your data center:
+
+1.Navigate to the Microsoft Download Center and choose Download to be taken to the download selection page, then on this page, select only vc_redist.x86.exe (do not select the "x64" version) regardless of the architecture of the machine you are installing on, then choose Next. Your download begins immediately.
+
+2.Download the Windows agent installer but do not double-click and execute the installer within Windows.
+
+3.Open a command prompt as an administrator and navigate to the location where you saved the installation package.
+
+4.To install the agent, run the following command.
+
+#msiexec.exe /i AWSDiscoveryAgentInstaller.msi REGION="us-west-2" KEY_ID="<aws key id>" KEY_SECRET="<aws key secret>" /q
+
+To check the status of ADS go to SERVICES -> AWS AGENT ->running
+

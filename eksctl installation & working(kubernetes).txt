@@ -1,0 +1,139 @@
+# aws configure
+# chocolatey install -y eksctl aws-iam-authenticator
+#choco install kubernetes-helm
+
+(If they are already installed, run the following command to upgrade
+#chocolatey upgrade -y eksctl aws-iam-authenticator)
+#eksctl version
+
+#eksctl create cluster --name prod --version 1.14 --nodegroup-name standard-workers --node-type t2.micro --nodes 3 --nodes-min 1 --nodes-max 4 --node-ami auto
+
+#kubectl get svc
+#kubectl get pods
+#kubectl get nodes
+
+To install nginx using helm package:
+#curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+
+#chmod +x get_helm.sh
+
+#./get_helm.sh
+
+TILLER NEEDED
+#New-Item -Path '\C\tasks1' -ItemType rbac.yaml
+# cat rbac.yaml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#kubectl apply -f  .\rbac.yaml
+#helm init --service-account tiller
+#helm repo update
+#helm search
+#helm search nginx
+#helm repo add bitnami https://charts.bitnami.com/bitnami
+#helm search bitnami
+#helm search nginx
+#helm search bitnami/nginx
+#helm install --name mywebserver bitnami/nginx
+#kubectl describe deployment mywebserver-nginx
+#kubectl get pods -l app=mywebserver-nginx
+#kubectl get service mywebserver-nginx -o wide
+
+Copy External Ip and paste in Browser
+You can see Nginx
+Nginx is like a load balancer. Traffic is tracked between three nodes
+ 
+
+-----------------------------------------------------------------------------
+To delete server
+#helm delete --purge mywebserver
+#kubectl get pods -l app=mywebserver-nginx
+#kubectl get service mywebserver-nginx -o wide
+NO SERVICES AVAILABLE
+
+To delete cluster:
+#eksctl delete cluster --name prod
+
+---------------------------------------------------------------------------------
+To delete a service:
+ 
+#kubectl get all
+#kubectl delete deploy/(**simple-deployment)** svc/(**simple-service**)
+================================================================
+Jenkins deployment on EKS:
+(Initially we need a storage)
+
+# helm install stable/jenkins --name cicd
+# kubectl get pods -o wide
+
+# printf $(kubectl get secret --namespace default cicd-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+
+  (*It gives the password* If it is not working in powershell give in bash)
+
+#echo http://$SERVICE_IP:8080/login
+
+  (*Gives the URL to get jenkins *)
+
+NOTES:
+1. Get your 'admin' user password by running:
+  printf $(kubectl get secret --namespace default cicd-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+2. Get the Jenkins URL to visit by running these commands in the same shell:
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status of by running 'kubectl get svc --namespace default -w cicd-jenkins'
+  export SERVICE_IP=$(kubectl get svc --namespace default cicd-jenkins --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+  echo http://$SERVICE_IP:8080/login
+
+3. Login with the password from step 1 and the username: admin
+
+
+For more information on running Jenkins on Kubernetes, visit:
+https://cloud.google.com/solutions/jenkins-on-container-engine
+============================================================
+
+# helm ls --all cicd = (to check the status of the release)
+#helm del --purge cicd =  (to delete it)
+
+
+----------------------------------------------------------------------------------------------------------------
+Health checksL:::
+ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH ROUGH 
+ New-Item -Path 'C\tasks1\liveness-app.yaml' -ItemType File
+  18 New-Item -Path 'C:\tasks1\liveness-app.yaml' -ItemType File
+  19 kubectl apply -f ~/environment/healthchecks/liveness-app.yaml
+  20 New-Item -Path 'C:\tasks1\liveness-app.yaml' -ItemType File
+  21 kubectl apply -f .\liveness-app.yaml
+  22 kubectl get pod liveness-app
+  23 kubectl describe pod liveness-app
+  24 kubectl exec -it liveness-app -- /bin/kill -s SIGUSR1 1
+  25 kubectl exec -it liveness-app -- /bin/kill -s SIGUSR1 1
+  26 kubectl exec -it liveness-app -- /bin/kill -s SIGUSR1 1
+  27 kubectl exec -it liveness-app -- /bin/kill
+  28 kubectl exec -it liveness-app -- /bin/kill -s SIGUSR1 1
+  29 kubectl exec -dt liveness-app -- /bin/kill -s SIGUSR1 1
+  30 kubectl exec -it liveness-app -- /bin/kill -s SIGUSR1 1
+  31 kubectl describe pod liveness-app
+-----------------------------------------------------------------------------------------------
+
+
+EKSCTL INSTALLTION ON LINUX :
+
+

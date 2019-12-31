@@ -1,0 +1,247 @@
+---
+- hosts : server
+  vars :
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: 1024     
+  tasks :
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/root/swap.conf.j2 dest=/etc/waagent.conf
+      notify : restart waagent
+  handlers:
+    - name: restart waagent
+      service: name=waagent state=restarted    
+
+
+=============================================================
+
+---
+- hosts : server
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1000}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/swap.conf dest=/etc/waagent.conf
+      notify : restart waagent
+  handlers:
+    - name: restart waagent
+      service: name=waagent state=restarted  
+
+
+
+
+
+
+======================================================
+---
+- hosts : swap5
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/playbookswap/waagent.conf dest=/etc/waagent.conf
+      notify : "{{item}}"
+      with_items:
+        - waagent
+        - walinuxagent
+  handlers:
+    - name: waagent
+      service: name=waagent state=restarted
+      when: ansible_distribution == "RedHat"
+      tags:
+        - restart
+    - name: walinuxagent
+      systemd: name=walinuxagent state=restarted daemon_reload=yes
+      when: ansible_distribution == "Ubuntu"
+      tags:
+        - restart
+
+
+==============================================================================================================================================
+
+
+
+---
+- hosts : swap5
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/playbookswap/waagent.conf dest=/etc/waagent.conf
+    - name : service start waagent
+      command: systemctl restart waagent
+      when: ansible_distribution = "Redhat"
+    - name : service start waagent
+      command: systemctl restart walinuxagent
+      when: ansible_distribution = "Ubuntu"
+======================================================
+---
+- hosts : swap
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/playbookswap/waagent.conf dest=/etc/waagent.conf
+
+    - name : restart walinuxagent
+      command : systemctl restart walinuxagent
+      when:  ansible_distribution == "Ubuntu"
+
+    - name: restart waagent
+      command: systemctl restart waagent
+      when: ansible_distribution == "RedHat"
+=====================================================
+---
+- hosts : server
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : comment fstab
+      replace:
+              path: /etc/fstab
+              regexp: '/dev/disk/cloud/azure_resource-part1'
+              replace: '#/dev/disk/cloud/azure_resource-part1'
+    - name: append fstab entry
+      lineinfile:
+              path: /etc/fstab
+              line: '/dev/sdb1       /mnt/resource   swap    defaults 0      0'
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      mount :
+        path : /mnt
+        state : unmounted
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/waagent.conf dest=/etc/waagent.conf
+
+    - name : restart walinuxagent
+      command : systemctl restart walinuxagent
+      when:  ansible_distribution == "Ubuntu"
+
+    - name: restart waagent
+      command: systemctl restart waagent
+      when: ansible_distribution == "RedHat"
+~
+=====================================================
+---
+- hosts : server
+  become : yes
+  vars:
+    ResourceDisk_Format: y
+    ResourceDisk_Filesystem: xfs
+    ResourceDisk_MountPoint: /mnt/resource
+    ResourceDisk_EnableSwap: y
+    ResourceDisk_SwapSizeMB: "{{free.stdout}}"
+  tasks :
+    - name : uncomment fstab
+      replace:
+              path: /etc/fstab
+              regexp: '/dev/disk/cloud/azure_resource-part1'
+              replace: '#/dev/disk/cloud/azure_resource-part1'
+    - name: uncomment previously added fstab
+              path: /etc/fstab
+              regexp: '/dev/sdb1       /mnt/resource'
+              replace: '#/dev/sdb1       /mnt/resource'
+    - name: append fstab entry
+      lineinfile:
+              path: /etc/fstab
+              line: '/dev/sdb1       /mnt/resource   swap    defaults 0      0'
+    - name : get free size value
+      shell : "(lsblk | grep sdb1 | awk '{print ($4)*1024}')"
+      register: free
+    - debug: msg={{free.stdout}}
+    - name : unmount device
+      command : umount -l /mnt
+      tags :
+        - setup
+    - name : setup swap
+      template : src=/etc/ansible/waagent.conf dest=/etc/waagent.conf
+
+    - name : restart walinuxagent
+      command : systemctl restart walinuxagent
+      when:  ansible_distribution == "Ubuntu"
+
+    - name: restart waagent
+      command: systemctl restart waagent
+      when: ansible_distribution == "RedHat"
+
+
+
+
+

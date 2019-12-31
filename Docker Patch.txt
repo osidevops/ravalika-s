@@ -1,0 +1,60 @@
+Docker installation:
+----------------------------
+
+#sudo yum update -y
+#sudo amazon-linux-extras install docker
+#sudo service docker start
+
+Install Java for jenkins:
+-----------------------------
+
+#yum install -y java
+(jdk1.8)
+
+#wget wget http://mirror.serverion.com/jenkins/war-stable/2.176.3/jenkins.war
+#java -jar jenkins.war
+
+Install docker-compose
+--------------------------------------------
+
+# curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# chmod +x /usr/local/bin/docker-compose
+
+#ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+=======================================
+
+apk search libbz2
+
+-------------------------------------------------------------------------------------------
+
+
+ yum update
+    2  java
+    3  yum install -y java
+    4  java -v
+    5  java -version
+    6  curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
+    7  sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+    8  sudo yum install jenkins
+    9  sudo systemctl start jenkins
+   10  sudo systemctl status jenkins
+   11  systemctl enable jenkins
+   12  curl ifconfig.co
+   13  yum install -y yum-utils   device-mapper-persistent-data   lvm2
+   14  yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+   15  yum-config-manager --enable docker-ce-nightly
+   16  yum-config-manager --enable docker-ce-test
+   17  yum-config-manager --disable docker-ce-nightly
+   18  yum install docker-ce docker-ce-cli containerd.io
+   19  yum list docker-ce --showduplicates | sort -r
+  
+   23  docker --version
+   24  systemctl start docker
+   25  systemctl status docker
+   26  systemctl enable docker
+   27  sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   28  sudo chmod +x /usr/local/bin/docker-compose
+   29  ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+   30  docker-compose --version

@@ -1,0 +1,20 @@
+open link and download required version:
+
+https://www.oracle.com/technetwork/java/javase/downloads/index.html
+Accept License Agreement
+
+SET PATH FOR JAVA:
+Step 1) Right Click on the My Computer and Select the properties
+Step 2) Click on advanced system settings
+Step 3) Click on Environment Variables
+Step 4) Click on new Button of User variables
+Step 5)Type PATH in the Variable name.
+Step 6) Copy the path of bin folder which is installed in JDK folder.---> 
+	Variable name: JAVA_PATH 
+	Variable value: C:\Program Files\Java\jdk1.8.0_201
+
+============================================
+ON LINUX
+
+#yum install java-1.8.0
+#java -version

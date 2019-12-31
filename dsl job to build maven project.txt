@@ -1,0 +1,16 @@
+job('Seed_job_test4') {
+    scm {
+        git('https://github.com/ravvalika/game-of-life.git')
+    }
+    triggers {
+        scm('H * * 10 *')
+    }
+    steps {
+      maven {
+       goals('clean')
+       goals('test')
+       goals('package')
+       mavenInstallation('maven')
+    }
+}
+} 

@@ -1,0 +1,26 @@
+ 
+					install tomcat9 on redhat
+				===================================
+ sudo yum install java-1.8.0-openjdk-devel
+   52  java -version
+   53  cd /tmp
+   54  wget http://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.21/bin/apache-tomcat-9.0.21.tar.gz
+   55  ls
+   56  tar apache-tomcat-9.0.21.tar.gz
+   57  tar -xvzf apache-tomcat-9.0.21.tar.gz
+   58  ls
+   59  mv apache-tomcat-9.0.21 tomcat9
+   60  ls
+   61  cd tomcat9/
+   62  ls
+   63  cd bin/
+   64  ls
+   65  ./startup.sh
+   66  service tomcat status
+   67  systemctl tomcat status
+   68  sudo service tomcat9 status
+   69  sudo service tomcat9 start
+   70  sudo service tomcat9 enable
+   71  sudo service tomcat9 status
+   72  yum install elinks
+   73  elinks http://ipadress:8080

@@ -1,0 +1,25 @@
+---
+- hosts: server
+  vars:
+    kibanaurl: 104.43.133.236:5601
+    elasticsearchurl: 104.43.133.236:9200
+  tasks:
+      - name: installing filebeat 7.4
+            apt:
+               deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.0-amd64.deb
+               state: present
+      - template:
+              src: /etc/ansible/filebeat.yml
+              dest: /etc/filebeat
+              notify: restart filebeat
+      - service:
+              name: filebeat
+              state: started
+              enabled: yes
+      - name: setup filebeat
+        command: filebeat setup
+  handlers:
+      - name: restart filebeat
+         service:
+             name: filebeat
+             state: restarted

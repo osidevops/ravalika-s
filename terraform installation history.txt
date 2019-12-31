@@ -1,0 +1,15 @@
+    1 wget https://releases.hashicorp.com/terraform/0.12.0/terraform_0.12.0_linux_amd64.zip
+    2  ls
+    3  unzip terraform_0.12.0_linux_amd64.zip
+    4  ls
+    9  ls -a
+   10  vi .bash_profile
+   11  mv terraform /home/ec2-user/
+   16  ls -a
+   17  vi .bash_profile
+   18  ls
+   19  cd /home/ec2-user/
+   20  ls
+   21  terraform -v
+   22  source ~/.bash_profile
+   23  terraform --version

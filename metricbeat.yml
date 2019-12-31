@@ -1,0 +1,26 @@
+---
+- hosts: server
+  vars:
+    kibanaurl: 104.43.133.236:5601
+    elasticsearchurl: 104.43.133.236:9200
+
+  tasks:
+    - name: installing metricbeat 7.4
+      apt:
+         deb: https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.4.0-amd64.deb
+         state: present
+    - template:
+         src: /etc/ansible/metricbeat.yml
+         dest: /etc/metricbeat
+         notify: restart metricbeat
+    - service:
+         name: metricbeat
+         state: started
+         enabled: yes
+    - name: setup metricbeat
+      command: metricbeat setup
+  handlers:
+    - name: restart metricbeat
+      service:
+         name: metricbeat
+         state: restarted

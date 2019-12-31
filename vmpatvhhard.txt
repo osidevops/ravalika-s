@@ -1,0 +1,19 @@
+VM Hardening: ??
+
+ process of securing a system by reducing its  vulnerability.??
+
+Patching:??
+
+Patching is necessary to keep servers secure from attackers and viruses as well as free from bugs, which can sap productivity.??
+
+??
+
+Lynis:??
+
+Lynis is one of the most trusted automated auditing tool for software patch management, malware scanning and vulnerability detecting in Unix/Linux based systems.
+
+??
+
+??
+
+??

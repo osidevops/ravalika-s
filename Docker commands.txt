@@ -1,0 +1,57 @@
+Docker installation:
+
+#sudo yum update -y
+#sudo amazon-linux-extras install docker
+#sudo service docker start
+
+(Add the ec2-user to the docker group so you can execute Docker commands without using sudo.
+#sudo usermod -a -G docker ec2-user)
+
+#docker info
+
+(Build the Docker image from your Dockerfile.)
+#docker build -t hello-world .
+
+(The docker build command builds an image from a Dockerfile and a context.)
+#docker build .
+#docker build -f /path/to/a/Dockerfile .
+
+(Run the newly built image. The -p 80:80 option maps the exposed port 80 on the container to port 80 on the host system.)
+#docker run -t -i -p 80:80 hello-world
+
+------------------------------------------------------------------------------------
+# docker pull (imagename)
+#docker build -t (imagename) .
+#docker login
+     username:
+     password:
+
+#docker images
+
+(List the containers also shows exited)
+#docker ps -a
+
+(List running containers)
+#docker ps 
+
+(remove all containers)
+#docker rm $(docker ps -a -q)
+
+(remove all images)
+#docker rmi $(docker images -q )
+
+#docker pull jenkins
+#docker run -it -p 8080:8080 jenkins
+#docker ps
+#docker inspect (container id)
+#elinks http://(container ip):8080
+==========================================================
+
+Docker push to hub:::
+
+#docker login
+#docker tag (existing image) (image name with dockr repo)
+#docker push (image name with dockr repo)
+
+
+
